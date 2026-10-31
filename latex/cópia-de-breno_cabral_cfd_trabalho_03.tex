@@ -1,0 +1,116 @@
+\documentclass[11pt,a4paper]{article}
+
+% ---------- Pacotes ----------
+% Compila tanto com pdfLaTeX quanto com XeLaTeX/LuaLaTeX
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage[brazil]{babel}
+  \IfFileExists{tgpagella.sty}{\usepackage{tgpagella}}{\usepackage{mathpazo}}
+\else
+  \usepackage{fontspec}
+  \usepackage{polyglossia}
+  \setdefaultlanguage[variant=brazilian]{portuguese}
+  \setmainfont{TeX Gyre Pagella}
+\fi
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\urlstyle{same}
+
+\definecolor{destaque}{HTML}{1F4E79}
+\setstretch{1.25}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0.35em}
+
+% Legendas das figuras
+\captionsetup{font={small,stretch=1.1},labelfont={bf,color=destaque},labelsep=period}
+
+% Títulos das questões
+\titleformat{\section}[hang]{\normalfont\large\bfseries\color{destaque}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{1.6em}{0.8em}
+
+% Cabeçalho e rodapé
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{gray}CFD Ambientes Oceânicos -- Atividade 01}
+\fancyhead[R]{\small\color{gray}Breno Santos Cabral}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\begin{document}
+
+% ---------- Identificação ----------
+\thispagestyle{empty}
+\begin{center}
+  {\Large\bfseries\color{destaque} CFD Ambientes Oceânicos}\\[0.3em]
+  {\large Atividade 03}\\[0.8em]
+  {\normalsize Breno Santos Cabral}\\[0.2em]
+  {\small 30 de outubro de 2026}
+\end{center}
+\noindent\textcolor{destaque}{\rule{\textwidth}{0.8pt}}
+
+% ---------- Resultados ----------
+O código \textsc{Fortran} fornecido foi reescrito na linguagem Python e pode ser acessado no link \url{https://github.com/BrenoSCabral/cfd_003}. As iterações considerando $\Delta t  = 1$ e $\Delta t = 10$ podem ser observada nas Figuras \ref{fig:dt1} e \ref{fig:dt10}, respectivamente. A diferença entre a solução analítica e as soluções numéricas pode ser observada no quadro inferior direito da Figura~\ref{fig:resultados}.
+
+O código busca avaliar o desempenho de diferentes métodos numéricos na integração da equação
+
+\begin{equation}
+\frac{dU}{dt} = gU
+\end{equation}
+
+Para cada método numérico, a discretização está destacada a seguir:
+
+\textbf{Progressivo}
+\begin{equation}
+U^{n+1} = g U^{n} 
+\end{equation}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{../solucoes_dt1.png}
+  \caption{Solução para $\Delta t = 1$ da equação de estudo de forma analítica e nos métodos Progressivo, Runge-Kutta Ordem 2 (RK2), Runge-Kutta Ordem 4 (RK4), Leap-frog, Matsuno, e Heun. O gráfico da esquerda apresenta os resultados em escala linear, enquanto o da direita utiliza escala logarítmica.}
+  \label{fig:dt1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{../solucoes_dt10.png}
+  \caption{Solução para $\Delta t = 10$ da equação de estudo de forma analítica e nos métodos Progressivo, RK2, RK4, Leap-frog, Matsuno, e Heun. O gráfico da esquerda apresenta os resultados em escala linear, enquanto o da direita utiliza escala logarítmica.}
+  \label{fig:dt10}
+\end{figure}
+
+
+
+% ---------- Análise ----------
+Utilizando o esquema de Euler progressivo, a equação $\dfrac{du}{dt} = F$ foi discretizada como
+\begin{equation}
+  u^{n+1} = u^{n} + F\,\Delta t .
+\end{equation}
+
+O método de von Neumann estabelece que a estabilidade pode ser avaliada a partir do fator de amplificação $\lambda$, definido por
+\begin{equation}
+  u^{n+1} = \lambda\, u^{n} ,
+\end{equation}
+sendo o esquema estável quando $|\lambda| \le 1$. Neste caso, como $F$ independe de $u$, $\lambda = 1$. Logo, o critério de estabilidade mostra que a solução é estável independentemente do passo de tempo adotado.
+
+Além disso, como $dF/dt = 0$, o erro de truncamento é nulo. Por isso, mesmo com a diminuição da resolução temporal, a solução numérica permanece idêntica à solução analítica. De forma gráfica, uma iteração do esquema é representada na Figura~\ref{fig:iteracao}, para um $\Delta t$ qualquer, ilustrando a afirmação do parágrafo acima.
+
+
+
+% ---------- Nota sobre IA ----------
+\vspace{1.2em}
+\noindent\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{\small\setstretch{1.1}%
+\textbf{Uso de IA:} a ferramenta Claude (Anthropic) foi utilizada na revisão do texto, na elaboração da Figura~\ref{fig:iteracao} e na formatação em \LaTeX.}}
+
+\end{document}
